@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Grid } from './grid.js'
 import GridLayout from 'react-grid-layout'
 import Webcam from 'react-webcam';
 
@@ -8,6 +7,8 @@ import './css/react-grid-styles.css';
 import './css/resizable-style.css';
 
 
+const fs = window.require('fs')
+
 class App extends Component {
 
     setRef = (webcam) => {
@@ -15,15 +16,20 @@ class App extends Component {
     }
 
     capture = () => {
-        const imageSrc = this.webcam.getScreenshot();
+        const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
+        try {
+            var buf = new Buffer(imageSrc, 'base64');
+            fs.writeFileSync('screenshot.png', buf)
+        }
+        catch(e) { alert(e); }
     };
     render() {
         const mainLayout = [
-            {i: 'camera', x: 0, y: 0, w: 4, h: 11, static: false},
-            {i: 'b', x: 4, y: 0, w: 5, h: 7},
-            {i: 'c', x: 0, y: 5, w: 1, h: 3},
-            {i: 'filler', x: 4, y: 0, w: 1, h: 2},
-            {i: 'login', x: 1, y: 0, w: 3, h: 3}
+            {i: 'camera', x: 1, y: 0, w: 4, h: 11, static: true},
+            {i: 'info', x: 5, y: 0, w: 4, h: 14},
+            {i: 'c', x: 1, y: 5, w: 4, h: 2},
+            // {i: 'filler', x: 5, y: 0, w: 1, h: 2},
+            {i: 'login', x: 1, y: 6, w: 4, h: 2}
 
         ];
 
@@ -50,6 +56,7 @@ class App extends Component {
                                 <Webcam className="webcam"
                                         audio={false}
                                         width={400}
+                                        screenshotFormat="image/jpeg"
                                         ref={this.setRef}/>
                             </div>
                             <div key="screenshot" className="innerGridItem webcamComponent">
@@ -59,11 +66,11 @@ class App extends Component {
                         </GridLayout>
 
                     </div>
-                    <div key="b">b</div>
+                    <div key="info"> info </div>
 
                     <div key="c">c</div>
 
-                    <div key="filler">filler</div>
+                    {/*<div key="filler">filler</div>*/}
 
                     <div key="login">
                         <button onClick={loginHandler} className="uiButton">
