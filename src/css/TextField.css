@@ -1,0 +1,12 @@
+form {
+    width: 400px;
+    display: flex;
+}
+
+input {
+    flex: 2;
+}
+
+input, label {
+    margin: 5px;
+}
