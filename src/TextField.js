@@ -20,11 +20,9 @@ class TextField extends Component {
 
     render() {
         return (
-
-            <form method="post">
-                <label for="myInput">Name: </label>
-                <input type="text" id="myInput" placeholder="Cersei Lannister"/>
-            </form>
+            <div align="center">
+                Name: <input type="text" placeholder="Cersei Lannister"/>
+            </div>
         );
     }
 }
