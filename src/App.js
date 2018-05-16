@@ -13,13 +13,18 @@ const fs = window.require('fs')
 
 class App extends Component {
 
-    setRef = (webcam) => {
+    setWebcamRef = (webcam) => {
         this.webcam = webcam;
-    }
+    };
+
+    settNameFieldRef = (nameField) => {
+        this.nameField = nameField;
+    };
 
     capture = () => {
         const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
         try {
+            // alert(this.nameField.state.value)
             const buf = new Buffer(imageSrc, 'base64');
             fs.writeFileSync('screenshot.jpg', buf)
         }
@@ -42,7 +47,7 @@ class App extends Component {
             console.log("you tried to log in")
         }
 
-
+        //TODO: make webcam only show square input
         return (
             <div>
                 <header className="heading">
@@ -54,10 +59,10 @@ class App extends Component {
                                 audio={false}
                                 width={400}
                                 screenshotFormat="image/jpeg"
-                                ref={this.setRef}/>
+                                ref={this.setWebcamRef}/>
                     </div>
                     <div key="name-field">
-                        <TextField/>
+                        <TextField ref={this.settNameFieldRef}/>
                     </div>
 
                     <div key="screenshot" className="innerGridItem webcamComponent">
@@ -67,8 +72,6 @@ class App extends Component {
                     <div key="info"> info </div>
 
                     <div key="c">c</div>
-
-                    {/*<div key="filler">filler</div>*/}
 
                     <div key="login">
                         <button onClick={loginHandler} className="uiButton">

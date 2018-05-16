@@ -28,10 +28,13 @@ import numpy as np
 import tensorflow as tf
 import facenet
 import align.detect_face
+import cv2
 
 __model_path__ = './model/facenet.pb'
 
 def get_embedding(image, image_size=160, margin=44, gpu_memory_fraction=1.0):
+
+    resize_image(image, image_size)
 
     images = load_and_align_data([image], image_size, margin, gpu_memory_fraction)
     with tf.Graph().as_default():
@@ -86,3 +89,18 @@ def load_and_align_data(image_paths, image_size, margin, gpu_memory_fraction):
         img_list.append(prewhitened)
     images = np.stack(img_list)
     return images
+
+def resize_image(image_path, image_size):
+    image = cv2.imread(image_path)
+    width = image.shape[0]
+    height = image.shape[1]
+    margin = int((width-height)/2)
+
+    if margin > 0:
+        image = image[margin:-margin, :]
+    else:
+        margin = -margin
+        image = image[:, margin:-margin]
+
+    image = cv2.resize(image, (image_size, image_size))
+    cv2.imwrite(image_path, image)
