@@ -2,6 +2,7 @@
 
 #local testing files
 *.png
+*.jpg
 
 
 # dependencies

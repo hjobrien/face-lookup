@@ -18,8 +18,8 @@ class App extends Component {
     capture = () => {
         const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
         try {
-            var buf = new Buffer(imageSrc, 'base64');
-            fs.writeFileSync('screenshot.png', buf)
+            const buf = new Buffer(imageSrc, 'base64');
+            fs.writeFileSync('screenshot.jpg', buf)
         }
         catch(e) { alert(e); }
     };
