@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GridLayout from 'react-grid-layout'
 import Webcam from 'react-webcam';
+import TextField from './TextField.js'
+
 
 import './css/App.css';
 import './css/react-grid-styles.css';
@@ -25,7 +27,9 @@ class App extends Component {
     };
     render() {
         const mainLayout = [
-            {i: 'camera', x: 1, y: 0, w: 4, h: 11, static: true},
+            {i: 'webcam', x: 1, y: 0, w: 4, h: 10, static: true},
+            {i: 'name-field', x: 1, y: 10, w: 4, h: 1, static: true},
+            {i: 'screenshot', x: 1, y: 11, w: 4, h: 1, static: true},
             {i: 'info', x: 5, y: 0, w: 4, h: 14},
             {i: 'c', x: 1, y: 5, w: 4, h: 2},
             // {i: 'filler', x: 5, y: 0, w: 1, h: 2},
@@ -33,11 +37,6 @@ class App extends Component {
 
         ];
 
-        const cameraLayout = [
-            {i: 'webcam', x: 0, y: 0, w: 4, h: 10, static: true},
-            {i: 'screenshot', x: 0, y: 10, w: 4, h: 1, static: true},
-
-        ];
 
         function loginHandler(){
             console.log("you tried to log in")
@@ -50,21 +49,20 @@ class App extends Component {
                     <h1 className="Title">Title</h1>
                 </header>
                 <GridLayout className="layout" layout={mainLayout} margin={[0,0]} cols={12} rowHeight={30} width={1200}>
-                    <div key="camera">
-                        <GridLayout className="layout" layout={cameraLayout} margin={[0,0]} cols={12} rowHeight={30} width={1200}>
-                            <div key="webcam" className="webcamComponent innerGridItem ">
-                                <Webcam className="webcam"
-                                        audio={false}
-                                        width={400}
-                                        screenshotFormat="image/jpeg"
-                                        ref={this.setRef}/>
-                            </div>
-                            <div key="screenshot" className="innerGridItem webcamComponent">
-                                <button className="uiButton"
-                                        onClick={this.capture}>Capture photo</button>
-                            </div>
-                        </GridLayout>
+                    <div key="webcam" className="webcamComponent innerGridItem ">
+                        <Webcam className="webcam"
+                                audio={false}
+                                width={400}
+                                screenshotFormat="image/jpeg"
+                                ref={this.setRef}/>
+                    </div>
+                    <div key="name-field">
+                        <TextField/>
+                    </div>
 
+                    <div key="screenshot" className="innerGridItem webcamComponent">
+                        <button className="uiButton"
+                                onClick={this.capture}>Capture photo</button>
                     </div>
                     <div key="info"> info </div>
 
