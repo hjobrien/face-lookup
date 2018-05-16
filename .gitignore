@@ -3,7 +3,10 @@
 #local testing files
 *.png
 *.jpg
+*.pyc
 
+#facenet model stuff
+src/facenet/model
 
 # dependencies
 /node_modules
