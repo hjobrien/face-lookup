@@ -10,6 +10,7 @@ import './css/resizable-style.css';
 
 
 const fs = window.require('fs')
+const spawn = require('child-process')
 
 class App extends Component {
 
@@ -27,6 +28,11 @@ class App extends Component {
             // alert(this.nameField.state.value)
             const buf = new Buffer(imageSrc, 'base64');
             fs.writeFileSync('screenshot.jpg', buf)
+
+            let py = spawn('python3', ['facenet/facenet_utils.py', 'screenshot.jpg'])
+            py.on('close', (output) =>{
+                alert(output)
+            })
         }
         catch(e) { alert(e); }
     };

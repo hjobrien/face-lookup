@@ -23,12 +23,15 @@ from __future__ import absolute_import
 
 import os
 import copy
+import sys
+
 from scipy import misc
 import numpy as np
 import tensorflow as tf
 import facenet
 import align.detect_face
 import cv2
+
 
 __model_path__ = './model/facenet.pb'
 
@@ -104,3 +107,6 @@ def resize_image(image_path, image_size):
 
     image = cv2.resize(image, (image_size, image_size))
     cv2.imwrite(image_path, image)
+
+if __name__ == '__main__':
+    get_embedding(sys.argv[1])
