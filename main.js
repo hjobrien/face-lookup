@@ -1,5 +1,6 @@
 const {app, BrowserWindow} = require('electron')
 
+
 let win = null;
 
 function createWindow() {

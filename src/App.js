@@ -4,13 +4,14 @@ import Webcam from 'react-webcam';
 import TextField from './TextField.js'
 
 
+
 import './css/App.css';
 import './css/react-grid-styles.css';
 import './css/resizable-style.css';
 
 
 const fs = window.require('fs')
-const spawn = require('child-process')
+const spawn = require('child_process').spawn;
 
 class App extends Component {
 
@@ -27,12 +28,12 @@ class App extends Component {
         try {
             // alert(this.nameField.state.value)
             const buf = new Buffer(imageSrc, 'base64');
-            fs.writeFileSync('screenshot.jpg', buf)
+            fs.writeFileSync('screenshot.jpg', buf);
 
-            let py = spawn('python3', ['facenet/facenet_utils.py', 'screenshot.jpg'])
-            py.on('close', (output) =>{
-                alert(output)
-            })
+            let py = spawn('python3', ['facenet/facenet_utils.py', 'screenshot.jpg']);
+            // py.on('close', (output) =>{
+            //     alert(output)
+            // })
         }
         catch(e) { alert(e); }
     };
