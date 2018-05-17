@@ -32,7 +32,6 @@ import facenet
 import align.detect_face
 import cv2
 
-
 __model_path__ = './model/facenet.pb'
 
 def get_embedding(image, image_size=160, margin=44, gpu_memory_fraction=1.0):
