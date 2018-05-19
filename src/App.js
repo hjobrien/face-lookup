@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GridLayout from 'react-grid-layout'
 import Webcam from 'react-webcam';
 import TextField from './TextField.js'
+import axios from 'axios';
 
 
 
@@ -10,8 +11,8 @@ import './css/react-grid-styles.css';
 import './css/resizable-style.css';
 
 
-const fs = window.require('fs')
-const spawn = require('child_process').spawn;
+const fs = window.require('fs');
+
 
 class App extends Component {
 
@@ -23,20 +24,41 @@ class App extends Component {
         this.nameField = nameField;
     };
 
-    capture = () => {
+    getEmbedding = () => {
         const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
         try {
-            // alert(this.nameField.state.value)
+            inputName = this.nameField.state.value;
             const buf = new Buffer(imageSrc, 'base64');
+            const base64img = Buffer.from(buf.toString(), 'base64');
             fs.writeFileSync('screenshot.jpg', buf);
 
-            let py = spawn('python3', ['facenet/facenet_utils.py', 'screenshot.jpg']);
-            // py.on('close', (output) =>{
-            //     alert(output)
-            // })
+            axios.get('127.0.0.1/', {
+                base64img: base64img
+            })
+                .then((response) => {
+                    alert('success');
+                    return {inputName: response}
+                })
+                .catch((err) => {
+                    alert(err.response.data);
+                })
         }
-        catch(e) { alert(e); }
+        catch (e) {
+            alert(e);
+        }
+    }
+
+    capture = () => {
+        embedding = getEmbedding();
+    //    TODO: write embedding to json database
     };
+
+    login = () => {
+        embedding = getEmbedding();
+    //    TODO: cross reference input embedding vs all past seen embeddings
+
+    };
+
     render() {
         const mainLayout = [
             {i: 'webcam', x: 1, y: 0, w: 4, h: 10, static: true},
@@ -49,10 +71,6 @@ class App extends Component {
 
         ];
 
-
-        function loginHandler(){
-            console.log("you tried to log in")
-        }
 
         //TODO: make webcam only show square input
         return (
@@ -81,7 +99,7 @@ class App extends Component {
                     <div key="c">c</div>
 
                     <div key="login">
-                        <button onClick={loginHandler} className="uiButton">
+                        <button onClick={this.login} className="uiButton">
                             Login
                         </button>
                     </div>

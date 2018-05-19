@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from facenet_utils import get_embedding
 from base64 import b64decode
 from datetime import datetime
@@ -6,18 +6,25 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello():
+    print('hey')
     return 'Hello World'
 
-@app.route('/requestEmbedding/b64img', methods=['POST'])
-def requestEmbedding(b64img):
+@app.route('/requestEmbedding', methods=['POST'])
+def requestEmbedding():
+    b64img = request.values[0]
     image_name = 'images/' + str(datetime.now()) + '.jpg'
     with open(image_name, 'w') as outfile:
         img = b64decode(b64img)
         outfile.write(img)
     return get_embedding(image_name) #TODO: maybe make get_embedding write to disk, then just return when done
 
+@app.route('/postTest', methods=['POST'])
+def postTest():
+    print('entered')
+    return "you sent: "+ request.values
+
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1')
+    app.run(host='0.0.0.0')
