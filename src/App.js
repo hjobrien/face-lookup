@@ -35,7 +35,7 @@ class App extends Component {
 
             // axios.defaults.port = 5000;
             axios.post('http://127.0.0.1:8080/postTest', {
-                base64img: 'hello'
+                base64img: "hello"
             })
             .then((response) => {
                 alert('success ' + String(response.data));

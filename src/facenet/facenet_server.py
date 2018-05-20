@@ -3,6 +3,7 @@ from facenet_utils import get_embedding
 from base64 import b64decode
 from datetime import datetime
 from flask_cors import CORS, cross_origin
+from ast import literal_eval
 
 
 
@@ -25,8 +26,8 @@ def requestEmbedding():
 
 @app.route('/postTest', methods=['POST'])
 def postTest():
-    print('entered')
-    return "you sent: "+ str(request.values)
+    request_dict = literal_eval(request.data.decode('UTF-8'))
+    return request_dict['base64img']
 
 
 if __name__ == "__main__":
