@@ -13,7 +13,6 @@ import './css/resizable-style.css';
 
 const fs = window.require('fs');
 
-
 class App extends Component {
 
     setWebcamRef = (webcam) => {
@@ -30,12 +29,11 @@ class App extends Component {
             const inputName = this.nameField.state.value;
             // inputName = '';
             const buf = new Buffer(imageSrc, 'base64');
-            const base64img = Buffer.from(buf.toString(), 'base64');
-            fs.writeFileSync('screenshot.jpg', buf);
+            const screenshotPath = 'screenshot.jpg';
+            fs.writeFileSync(screenshotPath, buf);
 
-            // axios.defaults.port = 5000;
-            axios.post('http://127.0.0.1:8080/postTest', {
-                base64img: "hello"
+            axios.post('http://127.0.0.1:8080/requestEmbedding', {
+                imagePath: screenshotPath
             })
             .then((response) => {
                 alert('success ' + String(response.data));
