@@ -20,41 +20,43 @@ class App extends Component {
         this.webcam = webcam;
     };
 
-    settNameFieldRef = (nameField) => {
+    setNameFieldRef = (nameField) => {
         this.nameField = nameField;
     };
 
     getEmbedding = () => {
         const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
         try {
-            inputName = this.nameField.state.value;
+            const inputName = this.nameField.state.value;
+            // inputName = '';
             const buf = new Buffer(imageSrc, 'base64');
             const base64img = Buffer.from(buf.toString(), 'base64');
             fs.writeFileSync('screenshot.jpg', buf);
 
-            axios.get('127.0.0.1/', {
-                base64img: base64img
+            // axios.defaults.port = 5000;
+            axios.post('http://127.0.0.1:8080/postTest', {
+                base64img: 'hello'
             })
-                .then((response) => {
-                    alert('success');
-                    return {inputName: response}
-                })
-                .catch((err) => {
-                    alert(err.response.data);
-                })
+            .then((response) => {
+                alert('success ' + String(response.data));
+                // return {inputName: response}
+            })
+            .catch((err) => {
+                alert(err.response.data);
+            })
         }
         catch (e) {
             alert(e);
         }
-    }
+    };
 
     capture = () => {
-        embedding = getEmbedding();
+        const embedding = this.getEmbedding();
     //    TODO: write embedding to json database
     };
 
     login = () => {
-        embedding = getEmbedding();
+        const embedding = this.getEmbedding();
     //    TODO: cross reference input embedding vs all past seen embeddings
 
     };
@@ -87,7 +89,7 @@ class App extends Component {
                                 ref={this.setWebcamRef}/>
                     </div>
                     <div key="name-field">
-                        <TextField ref={this.settNameFieldRef}/>
+                        <TextField ref={this.setNameFieldRef}/>
                     </div>
 
                     <div key="screenshot" className="innerGridItem webcamComponent">

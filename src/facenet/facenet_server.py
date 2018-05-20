@@ -2,14 +2,17 @@ from flask import Flask, request
 from facenet_utils import get_embedding
 from base64 import b64decode
 from datetime import datetime
+from flask_cors import CORS, cross_origin
+
 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET'])
 def hello():
     print('hey')
-    return 'Hello World'
+    return "Hello World"
 
 @app.route('/requestEmbedding', methods=['POST'])
 def requestEmbedding():
@@ -23,8 +26,8 @@ def requestEmbedding():
 @app.route('/postTest', methods=['POST'])
 def postTest():
     print('entered')
-    return "you sent: "+ request.values
+    return "you sent: "+ str(request.values)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(port=8080)
