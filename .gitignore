@@ -8,6 +8,9 @@
 #facenet model stuff
 src/facenet/model
 
+#all face embeddings:
+embeddings.json
+
 # dependencies
 /node_modules
 

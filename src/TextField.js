@@ -15,7 +15,7 @@ class TextField extends Component {
 
 
     handleChange(event) {
-        this.setState({value: event.target.value}.toUpperCase());
+        this.setState({value: event.target.value.toUpperCase()});
     }
 
     render() {

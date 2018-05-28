@@ -33,10 +33,11 @@ class App extends Component {
             fs.writeFileSync(screenshotPath, buf);
 
             axios.post('http://127.0.0.1:8080/requestEmbedding', {
-                imagePath: screenshotPath
+                imagePath: screenshotPath,
+                inputName: inputName
             })
             .then((response) => {
-                alert('success ' + String(response.data));
+                alert(response.data);
                 // return {inputName: response}
             })
             .catch((err) => {

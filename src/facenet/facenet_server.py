@@ -2,8 +2,10 @@ from flask import Flask, request
 from facenet_utils import get_embedding
 from flask_cors import CORS, cross_origin
 from ast import literal_eval
+import json
+import numpy as np
 
-
+embedding_dict_name = 'embeddings.json'
 
 app = Flask(__name__)
 CORS(app)
@@ -17,8 +19,20 @@ def hello():
 
 @app.route('/requestEmbedding', methods=['POST'])
 def requestEmbedding():
-    imagePath = literal_eval(request.data.decode('UTF-8'))['imagePath']
-    return str(get_embedding(imagePath)) #TODO: maybe make get_embedding write to disk, then just return when done
+    image_path = literal_eval(request.data.decode('UTF-8'))['imagePath']
+    input_name = literal_eval(request.data.decode('UTF-8'))['inputName']
+    try:
+        with open(embedding_dict_name, 'r') as embedding_dict:
+            data = json.load(embedding_dict)
+    except IOError:
+        file = open(embedding_dict_name, 'w+')
+        file.close()
+        data = {}
+    with open(embedding_dict_name, 'w') as embedding_dict:
+        data[input_name] = get_embedding(image_path).tolist()[0]
+        json.dump(data, embedding_dict)
+
+    return 'Successfully wrote embedding to disk'
 
 @app.route('/postTest', methods=['POST'])
 def postTest():
