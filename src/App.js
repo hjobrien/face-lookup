@@ -12,6 +12,9 @@ import './css/resizable-style.css';
 
 
 const fs = window.require('fs');
+const loadJsonFile = window.require('load-json-file');
+
+const EMBEDDING_DICT_PATH = 'embeddings.json';
 
 class App extends Component {
 
@@ -25,38 +28,44 @@ class App extends Component {
 
     getEmbedding = () => {
         const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
-        try {
-            const inputName = this.nameField.state.value;
-            // inputName = '';
-            const buf = new Buffer(imageSrc, 'base64');
-            const screenshotPath = 'screenshot.jpg';
-            fs.writeFileSync(screenshotPath, buf);
+        const inputName = this.nameField.state.value;
+        // inputName = '';
+        const buf = new Buffer(imageSrc, 'base64');
+        const screenshotPath = 'screenshot.jpg';
+        fs.writeFileSync(screenshotPath, buf);
 
-            axios.post('http://127.0.0.1:8080/requestEmbedding', {
-                imagePath: screenshotPath,
-                inputName: inputName
-            })
-            .then((response) => {
-                alert(response.data);
-                // return {inputName: response}
-            })
-            .catch((err) => {
-                alert(err.response.data);
-            })
-        }
-        catch (e) {
-            alert(e);
-        }
+        return axios.post('http://127.0.0.1:8080/requestEmbedding', {
+            imagePath: screenshotPath,
+            inputName: inputName
+        })
+
     };
 
     capture = () => {
-        const embedding = this.getEmbedding();
-    //    TODO: write embedding to json database
+        this.getEmbedding()
+            .then(response => {
+                alert(response.data)
+            })
+            .catch(err => {
+                alert(err.data)
+            });
     };
 
     login = () => {
-        const embedding = this.getEmbedding();
-    //    TODO: cross reference input embedding vs all past seen embeddings
+        loadJsonFile(EMBEDDING_DICT_PATH)
+            .then(jsonDict => {
+                this.getEmbedding()
+                    .then(response => {
+                        alert(response.data)
+                    })
+                    .catch(err => {
+                        alert(err.data)
+                    })
+            })
+            .catch(err => {
+                alert(err)
+            })
+
 
     };
 
