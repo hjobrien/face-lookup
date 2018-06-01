@@ -28,11 +28,12 @@ def requestEmbedding():
         file = open(embedding_dict_name, 'w+')
         file.close()
         data = {}
+    embedding = list(get_embedding(image_path).tolist()[0])
     with open(embedding_dict_name, 'w') as embedding_dict:
-        data[input_name] = get_embedding(image_path).tolist()[0]
+        data[input_name] = embedding
         json.dump(data, embedding_dict)
 
-    return 'Successfully wrote embedding to disk'
+    return str(embedding)
 
 @app.route('/postTest', methods=['POST'])
 def postTest():
