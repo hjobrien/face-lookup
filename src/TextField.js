@@ -21,7 +21,11 @@ class TextField extends Component {
     render() {
         return (
             <div align="center">
-                Name: <input type="text" value={this.state.value} onChange={this.handleChange} />
+                Name: <input type="text"
+                             value={this.state.value}
+                             onChange={this.handleChange}
+                             placeholder="Name"
+                             />
             </div>
         );
     }

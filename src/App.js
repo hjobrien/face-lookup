@@ -53,16 +53,44 @@ class App extends Component {
             });
     };
 
+    static euclidianDist(vec1, vec2){
+        if(vec1.length !== vec2.length){
+            throw "vectors are different length";
+        }
+        let accum = 0;
+        for(let i = 0; i < vec1.length; i++){
+            accum += Math.pow(vec1[i] - vec2[i], 2);
+        }
+        return Math.sqrt(accum);
+    }
+
+    static getBestMatch(embedding, dataDict){
+        let bestNameSoFar = 'Error';
+        let minDistSoFar = Infinity;
+        for(let i = 0; i < Object.keys(dataDict).length; i++){
+            const key = Object.keys(dataDict)[i];
+            const dist = App.euclidianDist(embedding, dataDict[key]);
+            console.log(key + ": " + dist);
+            if(dist < minDistSoFar){
+                minDistSoFar = dist;
+                bestNameSoFar = key;
+            }
+        }
+        return bestNameSoFar;
+    }
+
     login = () => {
         const shouldWrite = 0;
         loadJsonFile(EMBEDDING_DICT_PATH)
             .then(jsonDict => {
                 this.getEmbedding(shouldWrite)
                     .then(response => {
-                        alert('login attempt')
+                        // console.log("embedding: " + response.data);
+                        // console.log(Object.keys(jsonDict));
+                        alert(App.getBestMatch(response.data, jsonDict));
                     })
                     .catch(err => {
-                        alert(err.data)
+                        alert(err)
                     })
             })
             .catch(err => {
