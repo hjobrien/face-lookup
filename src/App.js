@@ -26,7 +26,7 @@ class App extends Component {
         this.nameField = nameField;
     };
 
-    getEmbedding = () => {
+    getEmbedding = (shouldWrite) => {
         const imageSrc = this.webcam.getScreenshot().replace(/^data:image\/\w+;base64,/, "");
         const inputName = this.nameField.state.value;
         // inputName = '';
@@ -36,15 +36,17 @@ class App extends Component {
 
         return axios.post('http://127.0.0.1:8080/requestEmbedding', {
             imagePath: screenshotPath,
-            inputName: inputName
+            inputName: inputName,
+            shouldWrite: shouldWrite
         })
 
     };
 
     capture = () => {
-        this.getEmbedding()
+        const shouldWrite = 1;
+        this.getEmbedding(shouldWrite)
             .then(response => {
-                alert(response.data)
+                alert('captured')
             })
             .catch(err => {
                 alert(err.data)
@@ -52,11 +54,12 @@ class App extends Component {
     };
 
     login = () => {
+        const shouldWrite = 0;
         loadJsonFile(EMBEDDING_DICT_PATH)
             .then(jsonDict => {
-                this.getEmbedding()
+                this.getEmbedding(shouldWrite)
                     .then(response => {
-                        alert(response.data)
+                        alert('login attempt')
                     })
                     .catch(err => {
                         alert(err.data)

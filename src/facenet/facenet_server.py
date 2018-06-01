@@ -19,8 +19,11 @@ def hello():
 
 @app.route('/requestEmbedding', methods=['POST'])
 def requestEmbedding():
-    image_path = literal_eval(request.data.decode('UTF-8'))['imagePath']
-    input_name = literal_eval(request.data.decode('UTF-8'))['inputName']
+    request_data = literal_eval(request.data.decode('UTF-8'))
+    image_path = request_data['imagePath']
+    input_name = request_data['inputName']
+    shouldWrite = request_data['shouldWrite']
+
     try:
         with open(embedding_dict_name, 'r') as embedding_dict:
             data = json.load(embedding_dict)
@@ -29,9 +32,10 @@ def requestEmbedding():
         file.close()
         data = {}
     embedding = list(get_embedding(image_path).tolist()[0])
-    with open(embedding_dict_name, 'w') as embedding_dict:
-        data[input_name] = embedding
-        json.dump(data, embedding_dict)
+    if shouldWrite:
+        with open(embedding_dict_name, 'w') as embedding_dict:
+            data[input_name] = embedding
+            json.dump(data, embedding_dict)
 
     return str(embedding)
 
